@@ -6,7 +6,7 @@ export type City = {
 }
 
 export type OfferPhotos = [string, string, string, string, string, string]
-export type OfferType = 'apartment' | 'apartment' | 'room' | 'hotel';
+export type OfferType = 'apartment' | 'house' | 'room' | 'hotel';
 export type OfferFeature = 'Breakfast' | 'Air conditioning' | 'Laptop friendly workspace' | 'Baby seat' | 'Washer' | 'Towels' | 'Fridge';
 
 // export enum OfferType {
