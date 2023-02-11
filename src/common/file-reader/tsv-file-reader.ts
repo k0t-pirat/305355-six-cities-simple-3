@@ -1,52 +1,34 @@
-import { readFileSync } from 'fs';
-import { Offer, OfferFeature, OfferPhotos, OfferType } from '../../types/offer.type.js';
+import EventEmitter from 'events';
+import { createReadStream } from 'fs';
 import { FileReaderInterface } from './file-reader-interface.js';
-import { UserType } from '../../types/user.type.js';
 
-export default class TsvFileReader implements FileReaderInterface {
-  private rawData = '';
-
-  constructor(public filename: string) {}
-
-  public read(): void {
-    this.rawData = readFileSync(this.filename, {encoding: 'utf-8'});
+export default class TsvFileReader extends EventEmitter implements FileReaderInterface {
+  constructor(public filename: string) {
+    super();
   }
 
-  public toArray(): Offer[] {
-    if (!this.rawData) {
-      return [];
+  public async read(): Promise<void> {
+    const stream = createReadStream(this.filename, {
+      highWaterMark: 16384,
+      encoding: 'utf-8',
+    });
+
+    let lineRead = '';
+    let endLinePosition = -1;
+    let importedRowCount = 0;
+
+    for await (const chunk of stream) {
+      lineRead += chunk.toString();
+
+      while ((endLinePosition = lineRead.indexOf('\n')) >= 0) {
+        const completeRow = lineRead.slice(0, endLinePosition + 1);
+        lineRead = lineRead.slice(++endLinePosition);
+        importedRowCount++;
+
+        this.emit('row', completeRow);
+      }
     }
 
-    return this.rawData
-      .split('\n')
-      .filter((row) => row.trim() !== '')
-      .map((line) => line.split('\t'))
-      .map(([title, description, issueDate, cityName, cityCoords, previewImage, photos, isPremium, rating, type, roomsCount, guestsCount, price, features, userName, userEmail, userAvatar, userPass, userType, commentsCount]) => ({
-        title,
-        description,
-        issueDate: new Date(issueDate),
-        city: {
-          name: cityName,
-          latlng: cityCoords.split(';').map((coord) => Number(coord)) as [number, number],
-        },
-        previewImage,
-        photos: photos.split(';') as OfferPhotos,
-        isPremium: isPremium === 'true',
-        rating: Number(rating),
-        type: type as OfferType,
-        roomsCount: Number(roomsCount),
-        guestsCount: Number(guestsCount),
-        price: Number(price),
-        features: features.split(';') as OfferFeature[],
-        author: {
-          name: userName,
-          email: userEmail,
-          avatar: userAvatar,
-          password: userPass,
-          type: userType as UserType,
-        },
-        commentsCount: Number(commentsCount),
-        coords: [1,2],
-      }));
+    this.emit('end', importedRowCount);
   }
 }
