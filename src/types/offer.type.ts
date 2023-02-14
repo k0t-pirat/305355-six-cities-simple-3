@@ -6,15 +6,15 @@ export type City = {
 }
 
 export type OfferPhotos = [string, string, string, string, string, string]
-export type OfferType = 'apartment' | 'house' | 'room' | 'hotel';
+// export type OfferType = 'apartment' | 'house' | 'room' | 'hotel';
 export type OfferFeature = 'Breakfast' | 'Air conditioning' | 'Laptop friendly workspace' | 'Baby seat' | 'Washer' | 'Towels' | 'Fridge';
 
-// export enum OfferType {
-//   Apartment = 'apartment',
-//   House = 'apartment',
-//   Room = 'room',
-//   Hotel = 'hotel',
-// }
+export enum OfferType {
+  Apartment = 'apartment',
+  House = 'house',
+  Room = 'room',
+  Hotel = 'hotel',
+}
 
 // export enum OfferFeatures {
 //   Breakfast = 'Breakfast',
@@ -41,6 +41,7 @@ export type Offer = {
   price: number;
   features: OfferFeature[];
   author: User;
+  // userId: string;
   commentsCount: number;
   coords: [number, number];
 }
