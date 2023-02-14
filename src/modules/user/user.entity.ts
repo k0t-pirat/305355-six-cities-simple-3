@@ -18,7 +18,6 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
     this.name = data.name;
     this.email = data.email;
     this.avatar = data.avatar;
-    // this.password = data.password;
     this.type = data.type;
   }
 

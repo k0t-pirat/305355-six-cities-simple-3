@@ -5,6 +5,7 @@ import CreateUserDTO from './dto/create-user.dto.js';
 import { UserServiceInterface } from './user-service.iterface.js';
 import { UserEntity } from './user.entity.js';
 import { LoggerInterface } from '../../common/logger/logger.interface.js';
+import UpdateUserDTO from './dto/update-user.dto.js';
 
 @injectable()
 export default class UserService implements UserServiceInterface {
@@ -23,11 +24,11 @@ export default class UserService implements UserServiceInterface {
     return result;
   }
 
-  public async findByEmail(email: string): Promise<DocumentType<UserEntity, types.BeAnObject> | null> {
+  public async findByEmail(email: string): Promise<DocumentType<UserEntity> | null> {
     return this.userModel.findOne({email});
   }
 
-  public async findOrCreate(dto: CreateUserDTO, salt: string): Promise<DocumentType<UserEntity, types.BeAnObject>> {
+  public async findOrCreate(dto: CreateUserDTO, salt: string): Promise<DocumentType<UserEntity>> {
     const existedUser = await this.findByEmail(dto.email);
 
     if (existedUser) {
@@ -35,5 +36,11 @@ export default class UserService implements UserServiceInterface {
     }
 
     return this.create(dto, salt);
+  }
+
+  public async updateById(userId: string, dto: UpdateUserDTO): Promise<DocumentType<UserEntity> | null> {
+    return this.userModel
+      .findByIdAndUpdate(userId, dto, {new: true})
+      .exec();
   }
 }
