@@ -4,3 +4,4 @@ GET http://localhost:3123/api HTTP/1.1
 
 ###
 
+GET http://localhost:31338/offers HTTP/1.1

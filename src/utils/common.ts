@@ -1,4 +1,6 @@
 import crypto from 'crypto';
+import { plainToInstance } from 'class-transformer';
+import {ClassConstructor} from 'class-transformer/types/interfaces/class-constructor.type.js';
 import { OfferFeature, OfferPhotos, OfferType } from '../types/offer.type';
 import { UserType } from '../types/user.type';
 
@@ -41,3 +43,11 @@ export const createSHA256 = (line: string, salt: string): string => {
   const shaHasher = crypto.createHmac('sha256', salt);
   return shaHasher.update(line).digest('hex');
 };
+
+export const fillDTO = <T,V>(someDTO: ClassConstructor<T>, plainObject: V) => {
+  plainToInstance(someDTO, plainObject, {excludeExtraneousValues: true});
+};
+
+export const createErrorObject = (message: string) => ({
+  error: message,
+});
