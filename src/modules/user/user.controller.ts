@@ -6,9 +6,11 @@ import { ConfigInterface } from '../../common/config/config.interface.js';
 import { Controller } from '../../common/controller/controller.js';
 import HttpError from '../../common/errors/http-error.js';
 import { LoggerInterface } from '../../common/logger/logger.interface.js';
+import { ValidateDtoMiddleware } from '../../common/middlewares/validate-dto.middleware.js';
 import { Component } from '../../types/component.types.js';
 import { fillDTO } from '../../utils/common.js';
 import CreateUserDTO from './dto/create-user.dto.js';
+import LoginUserDTO from './dto/login-user.dto.js';
 import UserResponse from './response/user.response.js';
 import { UserServiceInterface } from './user-service.iterface.js';
 
@@ -22,7 +24,18 @@ export default class UserController extends Controller {
     super(logger);
     this.logger.info('Register routes for UserController...');
 
-    this.addRoute({path: '/register', method: HttpMethod.Post, handler: this.create});
+    this.addRoute({
+      path: '/register',
+      method: HttpMethod.Post,
+      handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(CreateUserDTO)],
+    });
+    this.addRoute({
+      path: '/login',
+      method: HttpMethod.Post,
+      handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(LoginUserDTO)],
+    });
   }
 
   public async create(
@@ -44,6 +57,27 @@ export default class UserController extends Controller {
       res,
       StatusCodes.CREATED,
       fillDTO(UserResponse, result),
+    );
+  }
+
+  public async login(
+    {body}: Request,
+    _res: Response,
+  ): Promise<void> {
+    const isUserExists = await this.userService.findByEmail(body.email);
+
+    if (!isUserExists) {
+      throw new HttpError(
+        StatusCodes.UNAUTHORIZED,
+        `User with email ${body.email} not found`,
+        'UserController',
+      );
+    }
+
+    throw new HttpError(
+      StatusCodes.NOT_IMPLEMENTED,
+      'Not implemented',
+      'UserController'
     );
   }
 }

@@ -8,7 +8,7 @@ import CreateOfferDTO from './dto/create-offer.dto.js';
 import UpdateOfferDTO from './dto/update-offer.dto.js';
 import { SortTypes } from '../../types/sort-types.enum.js';
 
-const DEFAULT_OFFERS_COUNT = 60;
+const DEFAULT_OFFERS_LIMIT = 60;
 
 @injectable()
 export default class OfferService implements OfferServiceInterface {
@@ -24,7 +24,7 @@ export default class OfferService implements OfferServiceInterface {
     return result;
   }
 
-  public async find(): Promise<DocumentType<OfferEntity>[]> {
+  public async find(limit?: number): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
       .aggregate([
         {
@@ -42,7 +42,7 @@ export default class OfferService implements OfferServiceInterface {
           $addFields: {id: {$toString: '$_id'}, commentsCount: {$size: '$comments'}}
         },
         {$unset: 'comments'},
-        {$limit: DEFAULT_OFFERS_COUNT},
+        {$limit: limit || DEFAULT_OFFERS_LIMIT},
         {$sort: {offersCount: SortTypes.DOWN}},
       ]).exec();
   }
