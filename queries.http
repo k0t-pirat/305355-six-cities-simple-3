@@ -4,4 +4,61 @@ GET http://localhost:3123/api HTTP/1.1
 
 ###
 
-GET http://localhost:31338/offers HTTP/1.1
+GET http://localhost:31337/offers HTTP/1.1
+
+###
+
+GET http://localhost:31337/offers/:offerId HTTP/1.1
+
+###
+
+POST http://localhost:31337/offers HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "Ноыое предожение",
+  "description": "Очень интеремносое новое предложенеи",
+  "issueDate": "2022-05-12T11:56:37.573Z",
+  "city": "Paris",
+  "previewImage": "some-pic.png",
+  "photos": ["some-pic1.png", "some-pic2.png", "some-pic3.png", "some-pic4.png", "some-pic5.png", "some-pic6.png"],
+  "isPremium": false,
+  "rating": 3,
+  "type": "apartment",
+  "roomsCount": 2,
+  "guestsCount": 5,
+  "price": 1408,
+  "features": [],
+  "userId": "someId62823cb2c5a64ce9f1b50ec8",
+  "commentsCount": 155,
+  "coords": [45, 45],
+}
+
+###
+
+DELETE http://localhost:31337/offers/:offerId HTTP/1.1
+
+###
+
+PATCH http://localhost:31337/offers/:offerId" HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "Обновлено",
+  "description": "Ух ты!",
+}
+
+###
+
+GET http://localhost:31337/offers/:offerId/comments HTTP/1.1
+
+###
+
+POST http://localhost:31337/comment HTTP/1.1
+Content-Type: application/json
+
+{
+  "text": "my opinnipb",
+  "userId": "someId",
+  "offerId": "someOfferId",
+}
