@@ -1,4 +1,4 @@
-import { IsDateString, IsEnum, IsMongoId, Max, MaxLength, Min, MinLength } from 'class-validator';
+import { IsDateString, IsEnum, Max, MaxLength, Min, MinLength } from 'class-validator';
 // import { City, OfferFeature, OfferPhotos, OfferType } from '../../../types/offer.type.js';
 import { OfferType } from '../../../types/offer.type.js';
 
@@ -44,7 +44,7 @@ export default class CreateOfferDTO {
 
   // public features!: OfferFeature[];
 
-  @IsMongoId({message: 'userId must be valid id'})
+  // @IsMongoId({message: 'userId must be valid id'})
   public userId!: string;
 
   // public commentsCount!: number;

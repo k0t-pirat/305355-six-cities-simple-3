@@ -1,5 +1,5 @@
 import { IsDateString, IsEnum, IsOptional, Max, MaxLength, Min, MinLength } from 'class-validator';
-import { OfferType } from '../../../types/offer.type';
+import { OfferType } from '../../../types/offer.type.js';
 
 export default class UpdateOfferDTO {
   @IsOptional()
