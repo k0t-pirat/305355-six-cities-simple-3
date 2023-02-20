@@ -12,6 +12,6 @@ export default class CreateCommentDTO {
   @IsMongoId({message: 'offerId must be a valid id'})
   public offerId!: string;
 
-  @IsMongoId({message: 'userId must be a valid id'})
+  // @IsMongoId({message: 'userId must be a valid id'})
   public userId!: string;
 }
